@@ -60,7 +60,9 @@ namespace GenerateBonusReport
                 string sColumnName = string.Empty;
                 for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
                 {
-                    if (sSupplier != ds.Tables[0].Rows[i]["SupplierName"].ToString())
+                    //if (sSupplier != ds.Tables[0].Rows[i]["SupplierName"].ToString())
+                    //KD Change
+                    if (!sSupplier.Equals(ds.Tables[0].Rows[i]["SupplierName"].ToString(), StringComparison.InvariantCultureIgnoreCase))
                     {
                         sColumnName = ds.Tables[0].Rows[i]["SupplierName"].ToString();
                         dsSupplier.Tables.Add(sColumnName);
@@ -114,105 +116,79 @@ namespace GenerateBonusReport
                 //Task 202: Select all data for all year
 
                 #region Select all data for all year For Task 202
-                try
-                {
-                    bool isFileGenerated = false;
-                    string filenameCSV = "StatisticsBonusgroupsByMember_All";
-                    string fileSavedPath = WriteCSVFileSourcedFromDB(filenameCSV, ds, out isFileGenerated);
-
-                    if (!string.IsNullOrEmpty(fileSavedPath))
-                    {
-                        MessageBox.Show("CSV Generated Successfully");
-                    }
-                }
-                catch(Exception ex)
-                {
-                    MessageBox.Show("Error for CSV: " + ex);
-                }
-                #endregion
-
-
-                #region the existing running code hide for Task 202: Select all data for all year
-
-                while (false)   //Task 202: Select all data for all year, extra while loop added
-                {
-                    string sSupplier = string.Empty;
-                    DataSet dsSupplier = new DataSet();
-                    string sColumnName = string.Empty;
-
-                    //Task 202: Generate only one file with all data 
-                    //int p = 0;
-                    //string trace = string.Empty;
+                
                     try
                     {
-                        for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
+                        while (false)
                         {
-                            //KD Change, Task, MemberName changed to MemberNo
-                            //p = i;
-                            if (!sSupplier.Equals(ds.Tables[0].Rows[i]["MemberName"].ToString(), StringComparison.InvariantCultureIgnoreCase))
+                            bool isFileGenerated = false;
+                            string filenameCSV = "StatisticsBonusgroupsByMember_All";
+                            string fileSavedPath = WriteCSVFileSourcedFromDB(filenameCSV, ds, out isFileGenerated);
+
+                            if (!string.IsNullOrEmpty(fileSavedPath))
                             {
-                                //KD Change, Task, MemberName changed to MemberNo
-                                sColumnName = ds.Tables[0].Rows[i]["MemberName"].ToString();
-
-                                //trace = "sColumnName: " + sColumnName;
-
-                                //Task 202: Select all data for all year
-                                //if (sColumnName != null && sColumnName.Contains("J Gustavssons"))
-                                //{ }
-
-
-                                dsSupplier.Tables.Add(sColumnName);
-
-                                //trace = "dsSupplier: " + sColumnName;
-
-                                dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Leverantörsnummer", ds.Tables[0].Columns[0].DataType));
-                                //dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn(ds.Tables[0].Columns[1].ColumnName, ds.Tables[0].Columns[1].DataType));
-                                dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Leverantörsnamn", ds.Tables[0].Columns[2].DataType));
-                                dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Startdatum", ds.Tables[0].Columns[3].DataType));
-                                dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Slutdatum", ds.Tables[0].Columns[4].DataType));
-                                dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Bonusgrupp namn", ds.Tables[0].Columns[5].DataType));
-                                dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Bonusgrupp belopp", ds.Tables[0].Columns[6].DataType));
+                                MessageBox.Show("CSV Generated Successfully");
                             }
-
-                            DataRow newRow = dsSupplier.Tables[sColumnName].NewRow();
-                            //Task 202: Generate only one file with all data 
-                            //trace = "DataRow Add";
-
-                            newRow[0] = ds.Tables[0].Rows[i][0];
-                            //newRow[1] = ds.Tables[0].Rows[i]["MemberName"];
-                            newRow[1] = ds.Tables[0].Rows[i][2];
-                            newRow[2] = ds.Tables[0].Rows[i][3];
-                            newRow[3] = ds.Tables[0].Rows[i][4];
-                            newRow[4] = ds.Tables[0].Rows[i][5];
-                            newRow[5] = ds.Tables[0].Rows[i][6];
-                            //Task 202: Select all data for all year
-                            //KD Change, Task, MemberName changed to MemberNo
-                            dsSupplier.Tables[ds.Tables[0].Rows[i]["MemberName"].ToString()].Rows.Add(newRow);
-
-                            //Task 202: Select all data for all year
-                            //trace = "DataRow Add newRow";
-
-                            //KD Change, Task, MemberName changed to MemberNo
-                            sSupplier = ds.Tables[0].Rows[i]["MemberName"].ToString();
-
-                            //trace = "sSupplier";
                         }
                     }
                     catch (Exception ex)
                     {
-                        //MessageBox.Show(ex.Message + p + trace);
-                        MessageBox.Show(ex.Message);
+                        MessageBox.Show("Error for CSV: " + ex);
+                    }
+                
+                #endregion
+
+                #region the existing running code hide for Task 202: Select all data for all year
+
+                //while (false)   //Task 202: Select all data for all year, extra while loop added
+                {
+
+                    string sSupplier = string.Empty;
+                    DataSet dsSupplier = new DataSet();
+                    string sColumnName = string.Empty;
+                    for (int i = 0; i <= ds.Tables[0].Rows.Count - 1; i++)
+                    {
+                        //if (sSupplier != ds.Tables[0].Rows[i]["MemberName"].ToString())
+                        if (!sSupplier.Equals(ds.Tables[0].Rows[i]["MemberName"].ToString(), StringComparison.InvariantCultureIgnoreCase))
+                        {
+                            sColumnName = ds.Tables[0].Rows[i]["MemberName"].ToString();
+                            dsSupplier.Tables.Add(sColumnName);
+
+                            dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Leverantörsnummer", ds.Tables[0].Columns[0].DataType));
+                            //dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn(ds.Tables[0].Columns[1].ColumnName, ds.Tables[0].Columns[1].DataType));
+                            dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Leverantörsnamn", ds.Tables[0].Columns[2].DataType));
+                            dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Startdatum", ds.Tables[0].Columns[3].DataType));
+                            dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Slutdatum", ds.Tables[0].Columns[4].DataType));
+                            dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Bonusgrupp namn", ds.Tables[0].Columns[5].DataType));
+
+
+                            dsSupplier.Tables[sColumnName].Columns.Add(new DataColumn("Bonusgrupp belopp", ds.Tables[0].Columns[6].DataType));
+                        }
+
+                        DataRow newRow = dsSupplier.Tables[sColumnName].NewRow();
+                        newRow[0] = ds.Tables[0].Rows[i][0];
+                        //newRow[1] = ds.Tables[0].Rows[i]["MemberName"];
+                        newRow[1] = ds.Tables[0].Rows[i][2];
+                        newRow[2] = ds.Tables[0].Rows[i][3];
+                        newRow[3] = ds.Tables[0].Rows[i][4];
+                        newRow[4] = ds.Tables[0].Rows[i][5];
+                        newRow[5] = ds.Tables[0].Rows[i][6];
+
+                        dsSupplier.Tables[ds.Tables[0].Rows[i]["MemberName"].ToString()].Rows.Add(newRow);
+
+                        sSupplier = ds.Tables[0].Rows[i]["MemberName"].ToString();
                     }
 
                     string documentPath = ConfigurationManager.AppSettings["ReportDir"];
 
-                    //Task 202: Select all data for all year, .xlsx has changed to .CSV file
+                    //Task 202: Select all data for all year
                     string filename = "StatisticsBonusgroupsByMember" + ".xlsx";
+                    //string filename = "StatisticsBonusgroupsByMember" + ".csv";
 
                     bool status = CreateExcelFile2.CreateExcelDocument(dsSupplier, documentPath + filename);
                     MessageBox.Show("Excel created successfully.\n" + status);
                 }
-                #endregion Task 202: Select all data for all year
+                #endregion 
             }
             catch (Exception ex)
             {
@@ -360,7 +336,7 @@ namespace GenerateBonusReport
             isFileGenerated = false;
             string csvFileName = string.Empty;
 
-            string documentPath = @"D:\KD\Bolist\GenerateBonusNewReportKD\GenerateBonusReport\Report\";
+            string documentPath = @"C:\Raymond\GenerateBonusNewReportKD\Reports\ToDay\";
             csvFileName = documentPath + fileName + ".csv";
 
 
@@ -402,8 +378,8 @@ namespace GenerateBonusReport
 
                         catch (Exception ex)
                         {
-                            isFileGenerated = false;
-                            MessageBox.Show(ex.Message + isFileGenerated); 
+                            isFileGenerated = true;
+                            MessageBox.Show(ex.Message + isFileGenerated);
                         }
                     }
                 }
@@ -457,12 +433,11 @@ namespace GenerateBonusReport
             catch (Exception ex)
             {
                 isFileGenerated = false;
-                MessageBox.Show(ex.Message); 
+                MessageBox.Show(ex.Message);
             }
 
             return csvFileName;
         }
-
     }
 
 }
